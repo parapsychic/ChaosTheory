@@ -9,7 +9,7 @@ public class PlayerActor : MonoBehaviour
     void TakeDamage(float damage)
     {
         health -= damage;
-        print(health);
+
         //Add particle effects
         isDead();
     }

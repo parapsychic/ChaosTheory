@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3427863948008614407}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.33, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -45,8 +45,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 5907552818576360580, guid: b42c68e22c40dee439e581420f64a38f, type: 3}
   numberOfBullets: 8
-  cooldownTime: 2
-  isRandom: 1
-  randomOffset: 25
+  cooldownTime: 1
+  isRandom: 0
+  randomOffset: 10
   bulletPool: []
+  currentPool: []
   isPoolExpandable: 0

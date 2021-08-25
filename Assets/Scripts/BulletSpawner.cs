@@ -16,7 +16,8 @@ public class BulletSpawner : MonoBehaviour
     float randomDifference;
 
     /*OBJECT POOLING LOGIC*/
-    [SerializeField] List<GameObject> bulletPool;
+    [SerializeField] List<GameObject> bulletPool; //inactive bullets
+    [SerializeField]  List<GameObject> currentPool; //active bullets
     [SerializeField] bool isPoolExpandable =false;
 
 
@@ -28,7 +29,8 @@ public class BulletSpawner : MonoBehaviour
 
         for (int i = 0; i < numberOfBullets; i++)
         {
-            GameObject bullet = Instantiate(bulletPrefab);
+            GameObject bullet = Instantiate(bulletPrefab,transform);
+            bullet.GetComponent<BulletBehaviour>().SetSpawner(this);
             bullet.SetActive(false);
             bulletPool.Add(bullet);
         }
@@ -53,7 +55,7 @@ public class BulletSpawner : MonoBehaviour
         for(int i=0; i<numberOfBullets; i++)
         {
             rotations[i] = initialAngle + (angleDifference * i);
-            print(rotations[i]);
+
         }
         return angleDifference;
 
@@ -71,23 +73,26 @@ public class BulletSpawner : MonoBehaviour
 
     GameObject CheckForAvailableBullets()
     {
-        for (int i = 0; i < bulletPool.Count; i++)
+        if(bulletPool.Count > 0)
         {
-            if (!bulletPool[i].activeInHierarchy)
-            {
-                print("checking");
-                return bulletPool[i];
-            }
+            return bulletPool[0];
         }
 
         if (isPoolExpandable)
         {
-            GameObject bullet = Instantiate(bulletPrefab);
+            GameObject bullet = Instantiate(bulletPrefab, transform);
+            bullet.GetComponent<BulletBehaviour>().SetSpawner(this);
             bullet.SetActive(false);
             bulletPool.Add(bullet);
+            return bullet;
         }
 
         return null;
+    }
+
+    public void ReturnToPool(GameObject bullet)
+    {
+        bulletPool.Add(bullet);
     }
 
     void SpawnBullets()
@@ -95,6 +100,7 @@ public class BulletSpawner : MonoBehaviour
         if (isRandom)
         {
             RandomizeAngles();
+            print("randomizing angles");
         }
 
         for (int i = 0; i < numberOfBullets; i++)
@@ -102,7 +108,8 @@ public class BulletSpawner : MonoBehaviour
             GameObject bullet = CheckForAvailableBullets();
             if (bullet!=null)
             {
-                print("got bullet");
+                bulletPool.Remove(bullet);
+                currentPool.Add(bullet);
                 bullet.transform.position = transform.position;
                 bullet.transform.rotation = Quaternion.Euler(0, 0, rotations[i]);
                 bullet.GetComponent<BulletBehaviour>().Activate();

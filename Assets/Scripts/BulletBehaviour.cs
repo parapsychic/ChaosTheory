@@ -3,9 +3,8 @@ using UnityEngine;
 public class BulletBehaviour : MonoBehaviour
 {
     [SerializeField] float speed = 5f;
+    [SerializeField] BulletSpawner spawner;
 
-
-    float rotation;
     public float damage = 10f;
     public Vector2 velocity;
     [SerializeField] float lifetime = 3f;
@@ -22,6 +21,11 @@ public class BulletBehaviour : MonoBehaviour
             ResetBullet();
     }
 
+    public void SetSpawner(BulletSpawner spawner)
+    {
+        this.spawner = spawner;
+    }
+
     public void Activate()
     {
         startTime = Time.time;
@@ -30,6 +34,7 @@ public class BulletBehaviour : MonoBehaviour
 
     void ResetBullet()
     {
+        spawner.ReturnToPool(gameObject);
         gameObject.SetActive(false);
 
     }
